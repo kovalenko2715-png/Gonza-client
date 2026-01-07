@@ -1,0 +1,199 @@
+<AudioPlayer>:
+    size_hint_y: None
+    height: "60dp"
+    padding: "10dp"
+    canvas.before:
+        Color:
+            rgba: .2, .2, .2, 1
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [10]
+    MDIconButton:
+        id: btn
+        icon: "play"
+        on_release: root.play_audio()
+    MDLabel:
+        text: "Аудиофайл"
+
+MDBoxLayout:
+    orientation: "vertical"
+    MDNavigationLayout:
+        ScreenManager:
+            id: screen_manager
+            ServerScreen:
+                name: 'server'
+            LoginScreen:
+                name: 'login'
+            RegisterAccScreen:
+                name: 'register_acc'
+            MainScreen:
+                name: 'main'
+            ChatRoomScreen:
+                name: 'chat_room'
+            ProfileScreen:
+                name: 'profile'
+            RegisterScreen:
+                name: 'register'
+
+        MDNavigationDrawer:
+            id: nav_drawer
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: "16dp"
+                spacing: "10dp"
+                MDLabel:
+                    text: app.nickname
+                    halign: "center"
+                    font_style: "H6"
+                MDRectangleFlatIconButton:
+                    icon: "account"
+                    text: "ПРОФИЛЬ"
+                    on_release: screen_manager.current = 'profile'; nav_drawer.set_state("close")
+                MDRectangleFlatIconButton:
+                    icon: "logout"
+                    text: "ВЫХОД"
+                    on_release: app.logout()
+                Widget:
+
+<ServerScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "40dp"
+        spacing: "20dp"
+        MDLabel:
+            text: "GONZA CLOUD"
+            halign: "center"
+            font_style: "H4"
+        MDTextField:
+            id: server_id
+            hint_text: "IP: 192.168.100.196"
+            mode: "rectangle"
+        MDRaisedButton:
+            text: "ПОДКЛЮЧИТЬСЯ"
+            on_release: root.connect()
+        Widget:
+
+<LoginScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "30dp"
+        spacing: "15dp"
+        MDTextField:
+            id: user
+            hint_text: "Логин"
+        MDTextField:
+            id: pw
+            password: True
+            hint_text: "Пароль"
+        MDRaisedButton:
+            text: "ВОЙТИ"
+            on_release: root.do_login()
+        MDFlatButton:
+            text: "НЕТ АККАУНТА? РЕГИСТРАЦИЯ"
+            on_release: root.manager.current = 'register_acc'
+        Widget:
+
+<RegisterAccScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: "30dp"
+        spacing: "15dp"
+        MDLabel:
+            text: "РЕГИСТРАЦИЯ"
+            halign: "center"
+        MDTextField:
+            id: reg_user
+            hint_text: "Придумайте логин"
+        MDTextField:
+            id: reg_pw
+            password: True
+            hint_text: "Придумайте пароль"
+        MDRaisedButton:
+            text: "СОЗДАТЬ АККАУНТ"
+            on_release: root.do_register()
+        MDFlatButton:
+            text: "НАЗАД"
+            on_release: root.manager.current = 'login'
+        Widget:
+
+<MainScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: "Чаты"
+            left_action_items: [["menu", lambda x: app.root.ids.nav_drawer.set_state("open")]]
+        ScrollView:
+            MDList:
+                id: rooms_list
+    MDFloatingActionButton:
+        icon: "plus"
+        pos_hint: {"center_x": .85, "center_y": .1}
+        on_release: app.root.ids.screen_manager.current = 'register'
+
+<ChatRoomScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: root.room_name
+            left_action_items: [["arrow-left", lambda x: setattr(app.root.ids.screen_manager, 'current', 'main')]]
+        ScrollView:
+            MDList:
+                id: messages_list
+        MDBoxLayout:
+            size_hint_y: None
+            height: "65dp"
+            padding: "5dp"
+            MDIconButton:
+                icon: "paperclip"
+                on_release: root.open_file_manager()
+            MDTextField:
+                id: msg_input
+            MDIconButton:
+                icon: "send"
+                on_release: root.send_message()
+
+<ProfileScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: "Настройки"
+            left_action_items: [["arrow-left", lambda x: setattr(app.root.ids.screen_manager, 'current', 'main')]]
+        MDBoxLayout:
+            padding: "20dp"
+            spacing: "20dp"
+            orientation: 'vertical'
+            MDCard:
+                size_hint: None, None
+                size: "140dp", "140dp"
+                pos_hint: {"center_x": .5}
+                radius: 70
+                on_release: root.choose_avatar()
+                FitImage:
+                    id: avatar_preview
+                    source: app.avatar_path
+                    radius: 70
+            MDTextField:
+                id: nick_field
+                text: app.nickname
+                hint_text: "Никнейм"
+            MDRaisedButton:
+                text: "СОХРАНИТЬ"
+                on_release: root.save_profile()
+            Widget:
+
+<RegisterScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        MDTopAppBar:
+            title: "Новая комната"
+        MDBoxLayout:
+            padding: "20dp"
+            orientation: 'vertical'
+            MDTextField:
+                id: room_name
+                hint_text: "Название чата"
+            MDRaisedButton:
+                text: "СОЗДАТЬ"
+                on_release: root.create_room()
+            Widget:
