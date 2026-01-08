@@ -1,6 +1,6 @@
 name: Build APK
 
-on: 
+on:
   push:
     branches: [ main ]
   pull_request:
@@ -39,8 +39,6 @@ jobs:
             libncurses5-dev \
             libncursesw5-dev \
             libtinfo5 \
-            libffi-dev \
-            libssl-dev \
             openjdk-17-jdk
 
       - name: Install Python Dependencies
@@ -50,9 +48,7 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Очистка старых артефактов, чтобы избежать конфликтов
-          buildozer android clean
-          # Запуск сборки в отладочном режиме
+          # НЕ используем clean перед первой сборкой, чтобы не было FileNotFoundError
           buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: 1
@@ -60,6 +56,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: GonzaCloud-App-Debug
+          name: GonzaCloud-App
           path: bin/*.apk
-          
