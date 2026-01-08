@@ -21,8 +21,7 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Очистка важна, если прошлый билд упал с ошибкой компиляции
-          buildozer android clean
+          # Мы не используем clean здесь, чтобы не было ошибки FileNotFoundError
           buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
