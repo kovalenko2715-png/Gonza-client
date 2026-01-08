@@ -1,61 +1,60 @@
 [app]
 
-# (str) Название приложения
+# (str) Title of your application
 title = GonzaCloud
 
-# (str) Имя пакета
+# (str) Package name
 package.name = gonzacloud
 
-# (str) Домен пакета
+# (str) Package domain
 package.domain = org.gonza
 
-# (str) Директория с исходным кодом (где лежит main.py)
+# (str) Source code where the main.py live
 source.dir = .
 
-# (list) Расширения файлов, которые нужно включить в сборку
+# (list) Source files to include
 source.include_exts = py,png,jpg,kv,atlas
 
-# (str) ВЕРСИЯ ПРИЛОЖЕНИЯ (ЭТО ИСПРАВЛЯЕТ ТВОЮ ОШИБКУ)
+# (str) Application version
 version = 0.1
 
-# (list) Зависимости приложения
-# Добавь сюда свои библиотеки через запятую, если они нужны в коде
+# (list) Application requirements
 requirements = python3,kivy,hostpython3,requests,urllib3,certifi
 
-# (int) Android API (33 — актуальный стандарт Google Play)
+# (int) Android API to use
 android.api = 33
 
-# (int) Минимальный поддерживаемый API
+# (int) Minimum API required
 android.minapi = 21
 
-# (str) Версия Android NDK (25b — самая стабильная для Kivy сейчас)
+# (str) Android NDK version to use
 android.ndk = 25b
 
-# (bool) Использовать приватное хранилище данных
+# (bool) Use --private data storage
 android.private_storage = True
 
-# (list) Разрешения (Интернет и память)
+# (list) Permissions
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 
-# (str) Ориентация экрана
+# (str) Supported orientation
 orientation = portrait
 
-# (bool) Полноэкранный режим
+# (bool) Fullscreen or not
 fullscreen = 0
 
-# (list) Архитектуры для сборки (arm64-v8a — для современных телефонов)
+# (list) The Android architectures to build for
 android.archs = arm64-v8a
 
-# (bool) Пропускать обновление SDK (ускоряет сборку)
+# (bool) skip update of the android sdk
 android.skip_update = False
 
-# (bool) Предупреждать, если запуск от root
+# (bool) Display warning if buildozer is run as root
 warn_on_root = 1
 
 [buildozer]
 
-# (int) Уровень логов (2 = максимально подробный для отладки)
+# (int) Log level (2 = debug)
 log_level = 2
 
-# (str) Путь к папке сборки
+# (str) Path to build artifacts
 bin_dir = ./bin
