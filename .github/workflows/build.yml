@@ -10,7 +10,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python_version: '3.11'
+          python-version: '3.11'
 
       - name: Install Dependencies
         run: |
@@ -21,6 +21,8 @@ jobs:
 
       - name: Build with Buildozer
         run: |
+          # Очистка важна, если прошлый билд упал с ошибкой компиляции
+          buildozer android clean
           buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
