@@ -12,20 +12,21 @@ jobs:
         with:
           python_version: '3.11'
 
-      - name: Install Buildozer and Dependencies
+      - name: Install Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential git python3-dev zip unzip libffi-dev libssl-dev
+          sudo apt-get install -y build-essential git python3-dev zip unzip libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libgmp-dev libmpc-dev
           pip install --upgrade pip
-          pip install Cython==0.29.33 buildozer
+          pip install "Cython<3.0" buildozer
 
       - name: Build with Buildozer
         run: |
-          yes | buildozer android debug
+          buildozer android debug || { echo "СБОРКА УПАЛА! СМОТРИ СТРОКИ ВЫШЕ"; exit 1; }
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
           name: GonzaCloud-App
