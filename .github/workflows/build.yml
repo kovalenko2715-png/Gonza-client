@@ -1,14 +1,14 @@
-name: Build APK
-
+name: Build Android APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-22.04
+    # Увеличиваем таймаут, так как сборка Kivy долгая
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -23,38 +23,38 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y \
-            build-essential \
-            git \
-            python3-dev \
-            zip \
-            unzip \
-            libffi-dev \
-            libssl-dev \
-            autoconf \
-            automake \
-            libtool \
-            pkg-config \
-            zlib1g-dev \
-            cmake \
-            libncurses5-dev \
-            libncursesw5-dev \
-            libtinfo5 \
-            openjdk-17-jdk
+            build-essential git python3-dev zip unzip \
+            libffi-dev libssl-dev libsdl2-dev libsdl2-image-dev \
+            libsdl2-mixer-dev libsdl2-ttf-dev libportmidi-dev \
+            libswscale-dev libavformat-dev libavcodec-dev \
+            zlib1g-dev libgstreamer1.0-gstreamer-lite-dev \
+            libgstreamer-plugins-base1.0-dev autoconf automake \
+            libtool pkg-config cmake gettext libasound2-dev \
+            wait-for-it
 
-      - name: Install Python Dependencies
+      - name: Install Buildozer and Cython
         run: |
           pip install --upgrade pip
           pip install "Cython<3.0" buildozer
 
+      # Кеширование папки .buildozer экономит до 20-30 минут при повторных сборках
+      - name: Cache Buildozer
+        uses: actions/cache@v4
+        with:
+          path: .buildozer
+          key: ${{ runner.os }}-buildozer-${{ hashFiles('buildozer.spec') }}
+          restore-keys: |
+            ${{ runner.os }}-buildozer-
+
       - name: Build with Buildozer
-        run: |
-          # НЕ используем clean перед первой сборкой, чтобы не было FileNotFoundError
-          buildozer android debug
+        run: yes | buildozer android debug
         env:
-          APP_ANDROID_ACCEPT_SDK_LICENSE: 1
+          # Принимаем лицензии SDK автоматически
+          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: GonzaCloud-App
+          name: package
           path: bin/*.apk
+          
