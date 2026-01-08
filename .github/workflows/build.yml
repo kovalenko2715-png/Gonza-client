@@ -15,11 +15,10 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          # Базовые зависимости
           sudo apt-get install -y build-essential git python3-dev zip unzip libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev cmake
           
-          # РЕШЕНИЕ ОШИБКИ 100: Установка libtinfo5 вручную для Ubuntu 24.04
-          wget http://azure.archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.4-2_amd64.deb
+          # Установка старой либы, которую требует Android SDK
+          wget http://archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.4-2_amd64.deb
           sudo apt install ./libtinfo5_6.4-2_amd64.deb
           
           pip install --upgrade pip
@@ -27,7 +26,6 @@ jobs:
 
       - name: Build with Buildozer
         run: |
-          # Прямой запуск без лишних команд
           buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
