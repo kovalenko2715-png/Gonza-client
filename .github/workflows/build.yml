@@ -15,18 +15,19 @@ jobs:
       - name: Install Dependencies
         run: |
           sudo apt-get update
-          # Устанавливаем базовые зависимости
+          # Базовые зависимости
           sudo apt-get install -y build-essential git python3-dev zip unzip libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev cmake
           
-          # ФИКС ДЛЯ UBUNTU 24.04: Установка libtinfo5 вручную
-          wget http://azure.archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
-          sudo apt install ./libtinfo5_6.3-2ubuntu0.1_amd64.deb
+          # РЕШЕНИЕ ОШИБКИ 100: Установка libtinfo5 вручную для Ubuntu 24.04
+          wget http://azure.archive.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.4-2_amd64.deb
+          sudo apt install ./libtinfo5_6.4-2_amd64.deb
           
           pip install --upgrade pip
           pip install "Cython<3.0" buildozer
 
       - name: Build with Buildozer
         run: |
+          # Прямой запуск без лишних команд
           buildozer android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
@@ -37,4 +38,3 @@ jobs:
         with:
           name: GonzaCloud-App
           path: bin/*.apk
-          
