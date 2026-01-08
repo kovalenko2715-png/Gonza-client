@@ -1,60 +1,61 @@
 [app]
 
-# (str) Title of your application
+# (str) Название приложения
 title = GonzaCloud
 
-# (str) Package name
+# (str) Имя пакета
 package.name = gonzacloud
 
-# (str) Package domain (needed for android packaging)
+# (str) Домен пакета
 package.domain = org.gonza
 
-# (str) Source code where the main.py live
+# (str) Директория с исходным кодом (где лежит main.py)
 source.dir = .
 
-# (list) Source files to include (let empty to include all the files)
+# (list) Расширения файлов, которые нужно включить в сборку
 source.include_exts = py,png,jpg,kv,atlas
 
-# (list) Application requirements
-# Добавь сюда свои библиотеки через запятую
+# (str) ВЕРСИЯ ПРИЛОЖЕНИЯ (ЭТО ИСПРАВЛЯЕТ ТВОЮ ОШИБКУ)
+version = 0.1
+
+# (list) Зависимости приложения
+# Добавь сюда свои библиотеки через запятую, если они нужны в коде
 requirements = python3,kivy,hostpython3,requests,urllib3,certifi
 
-# (str) Custom source folders for requirements
-# садят версию cython, которую мы указали в workflow
-# (int) Android API to use
+# (int) Android API (33 — актуальный стандарт Google Play)
 android.api = 33
 
-# (int) Minimum API required
+# (int) Минимальный поддерживаемый API
 android.minapi = 21
 
-# (str) Android NDK version to use
+# (str) Версия Android NDK (25b — самая стабильная для Kivy сейчас)
 android.ndk = 25b
 
-# (bool) Use --private data storage (True) or --dir public storage (False)
+# (bool) Использовать приватное хранилище данных
 android.private_storage = True
 
-# (list) Permissions
+# (list) Разрешения (Интернет и память)
 android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE
 
-# (str) Supported orientation (one of landscape, sensorLandscape, portrait or all)
+# (str) Ориентация экрана
 orientation = portrait
 
-# (bool) Indicate if the application should be fullscreen or not
+# (bool) Полноэкранный режим
 fullscreen = 0
 
-# (list) The Android architectures to build for
+# (list) Архитектуры для сборки (arm64-v8a — для современных телефонов)
 android.archs = arm64-v8a
 
-# (bool) skip update of- the android sdk
+# (bool) Пропускать обновление SDK (ускоряет сборку)
 android.skip_update = False
 
-# (bool) Display warning if buildozer is run as root
+# (bool) Предупреждать, если запуск от root
 warn_on_root = 1
 
 [buildozer]
 
-# (int) Log level (0 = error only, 1 = info, 2 = debug (with command output))
+# (int) Уровень логов (2 = максимально подробный для отладки)
 log_level = 2
 
-# (int) Display warning if buildozer is run as root
-warn_on_root = 1
+# (str) Путь к папке сборки
+bin_dir = ./bin
