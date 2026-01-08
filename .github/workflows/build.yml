@@ -1,40 +1,65 @@
 name: Build APK
-on: [push, pull_request]
+
+on: 
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential git python3-dev zip unzip libffi-dev libssl-dev autoconf automake libtool pkg-config zlib1g-dev cmake
-          
-          # УНИВЕРСАЛЬНЫЙ ФИКС libtinfo5 для Ubuntu 24.04
-          # Добавляем репозиторий от старой Ubuntu, где эта либа есть официально
-          sudo add-apt-repository 'deb http://azure.archive.ubuntu.com/ubuntu/ jammy universe' -y
-          sudo apt-get update
-          sudo apt-get install -y libtinfo5 libncurses5
-          
+          sudo apt-get install -y \
+            build-essential \
+            git \
+            python3-dev \
+            zip \
+            unzip \
+            libffi-dev \
+            libssl-dev \
+            autoconf \
+            automake \
+            libtool \
+            pkg-config \
+            zlib1g-dev \
+            cmake \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libtinfo5 \
+            libffi-dev \
+            libssl-dev \
+            openjdk-17-jdk
+
+      - name: Install Python Dependencies
+        run: |
           pip install --upgrade pip
           pip install "Cython<3.0" buildozer
 
       - name: Build with Buildozer
         run: |
+          # Очистка старых артефактов, чтобы избежать конфликтов
+          buildozer android clean
+          # Запуск сборки в отладочном режиме
           buildozer android debug
         env:
-          APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
+          APP_ANDROID_ACCEPT_SDK_LICENSE: 1
 
       - name: Upload APK
-        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GonzaCloud-App
+          name: GonzaCloud-App-Debug
           path: bin/*.apk
+          
